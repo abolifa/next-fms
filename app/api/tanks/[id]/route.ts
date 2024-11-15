@@ -50,7 +50,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    await prisma.employee.delete({ where: { id: params.id } });
+    await prisma.tank.delete({ where: { id: params.id } });
     return NextResponse.json({ message: "Record deleted successfully" });
   } catch (error) {
     console.error("Error deleting record:", error);

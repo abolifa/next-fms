@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { FuelType } from "@prisma/client";
+import { Tank } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { Edit, Trash2 } from "lucide-react";
@@ -22,30 +22,43 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { queryClient } from "../layout";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import { formatToLiters } from "@/lib/utils";
 
-export const columns: ColumnDef<FuelType>[] = [
+type ITank = Tank & {
+  fuelType: {
+    name: string;
+  };
+};
+
+export const columns: ColumnDef<ITank>[] = [
   {
     accessorKey: "name",
-    header: "الوقود",
-    cell: ({ row }) => {
-      const name = row.original.name;
-      const id = row.original.id;
-      const router = useRouter();
-      return (
-        <Badge
-          className={cn(
-            "cursor-pointer",
-            name === "وقود طائرات" && "bg-red-500 text-secondary-foreground",
-            name === "بنزين" && "bg-green-500 text-secondary-foreground",
-            name === "ديزل" && "bg-orange-500 text-secondary-foreground"
-          )}
-          onClick={() => router.push(`/fuel/${id}`)}
-        >
-          {name}
-        </Badge>
-      );
-    },
+    header: "إسم الخزان",
+  },
+  {
+    accessorKey: "fuelType.name",
+    header: "نوع الوقود",
+    cell: ({ row }) => (
+      <Badge className={"text-md"}>{row.original.fuelType.name}</Badge>
+    ),
+  },
+  {
+    accessorKey: "capacity",
+    header: "السعة القصوى",
+    cell: ({ row }) => (
+      <Badge className="text-md bg-green-500 text-secondary-foreground">
+        {formatToLiters(row.original.capacity)}
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: "currentLevel",
+    header: "المستوى الإبتدائي",
+    cell: ({ row }) => (
+      <Badge className="text-md bg-orange-400 text-secondary-foreground">
+        {formatToLiters(row.original.currentLevel)}
+      </Badge>
+    ),
   },
   {
     accessorKey: "created",
@@ -70,9 +83,9 @@ export const columns: ColumnDef<FuelType>[] = [
       const id = row.original.id;
       const router = useRouter();
       const mutation = useMutation({
-        mutationKey: ["fuel"],
+        mutationKey: ["tanks"],
         mutationFn: async () => {
-          await axios.delete(`/api/fuel/${id}`);
+          await axios.delete(`/api/tanks/${id}`);
         },
         onMutate: () => {
           toast.loading("جاري الحذف", {
@@ -87,7 +100,7 @@ export const columns: ColumnDef<FuelType>[] = [
           toast.error("فشل الحذف");
         },
         onSettled: () => {
-          queryClient.invalidateQueries({ queryKey: ["fuel"] });
+          queryClient.invalidateQueries({ queryKey: ["tanks"] });
         },
       });
       return (
@@ -95,7 +108,7 @@ export const columns: ColumnDef<FuelType>[] = [
           <Button
             variant={"outline"}
             size={"sm"}
-            onClick={() => router.push(`/fuel/${id}`)}
+            onClick={() => router.push(`/tanks/${id}`)}
           >
             <Edit />
             تعديل
