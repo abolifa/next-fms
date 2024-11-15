@@ -70,7 +70,7 @@ const Sidebar = () => {
                   <Link
                     href={item.path}
                     className={cn(
-                      "flex gap-2 items-center bg-slate-100 p-3 rounded-full text-muted-foreground hover:text-primary transition-colors ease-in-out",
+                      "flex gap-2 items-center bg-primary-foreground p-3 rounded-full text-muted-foreground hover:text-primary transition-colors ease-in-out",
                       isActive && "bg-primary text-white hover:text-white"
                     )}
                     key={item.name}

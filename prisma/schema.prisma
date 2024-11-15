@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String   @id @default(cuid())
+  name     String
+  username String   @unique
+  email    String
+  password String
+  created  DateTime @default(now())
+  updated  DateTime @updatedAt
+}
+
+model Employee {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?
+  phone     String?
+  major     Major    @default(else)
+  class     Class    @default(else)
+  startDate DateTime @default(now())
+  active    Boolean  @default(true)
+  created   DateTime @default(now())
+  updated   DateTime @updatedAt
+}
+
+enum Major {
+  akinci
+  tb2
+  hr
+  supervisor
+  manager
+  else
+}
+
+enum Class {
+  operator
+  payload
+  ammunition
+  avionics
+  mechanics
+  else
+}

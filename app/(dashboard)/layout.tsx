@@ -20,7 +20,7 @@ export default function DashboardLayout({
         <Sidebar />
         <div className="flex-1 flex flex-col items-start justify-start">
           <Navbar />
-          <div className="p-5">{children}</div>
+          <div className="p-8 flex-1 w-full">{children}</div>
         </div>
       </div>
       <ReactQueryDevtools initialIsOpen={false} />
