@@ -30,6 +30,25 @@ model Employee {
   updated   DateTime @updatedAt
 }
 
+model FuelType {
+  id      String   @id @default(cuid())
+  name    String
+  created DateTime @default(now())
+  updated DateTime @updatedAt
+  Tank    Tank[]
+}
+
+model Tank {
+  id           String    @id @default(cuid())
+  name         String
+  fuelTypeId   String?
+  capacity     Int
+  currentLevel Int
+  fuelType     FuelType? @relation(fields: [fuelTypeId], references: [id], onDelete: SetNull)
+  created      DateTime  @default(now())
+  updated      DateTime  @updatedAt
+}
+
 enum Major {
   akinci
   tb2

@@ -1,92 +1,94 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import {
-  Fuel,
-  LayoutDashboard,
-  Package,
-  Receipt,
-  Settings,
-  User,
-} from "lucide-react";
-import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import UserIcon from "./UserIcon";
+import GlobalSearch from "./GlobalSearch";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import React from "react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./ui/tooltip";
+import { MdDashboard } from "react-icons/md";
+import { HiUsers } from "react-icons/hi";
+import { BsFuelPumpFill } from "react-icons/bs";
+import { Button } from "./ui/button";
+import { Plus } from "lucide-react";
+import { MdPropaneTank } from "react-icons/md";
+import { cn } from "@/lib/utils";
 
 const pages = [
   {
     name: "الرئيسية",
     path: "/",
-    icon: LayoutDashboard,
+    icon: MdDashboard,
   },
   {
     name: "الموظفين",
     path: "/employees",
-    icon: User,
+    icon: HiUsers,
+    add: "/employees/new",
   },
   {
-    name: "الخزانات",
+    name: "أنواع الوقود",
+    path: "/fuel",
+    icon: BsFuelPumpFill,
+    add: "/fuel/new",
+  },
+  {
+    name: " الخزانات",
     path: "/tanks",
-    icon: Fuel,
-  },
-  {
-    name: "طلبات",
-    path: "/orders",
-    icon: Receipt,
-  },
-  {
-    name: "عمليات",
-    path: "/operations",
-    icon: Package,
-  },
-  {
-    name: "الإعدادات",
-    path: "/settings",
-    icon: Settings,
+    icon: MdPropaneTank,
+    add: "/tanks/new",
   },
 ];
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const router = useRouter();
   return (
-    <TooltipProvider>
-      <div className="w-auto h-screen p-5 border">
-        <div className="flex flex-col items-center gap-6">
-          <Link href={"/"} className="mb-5">
-            <Image src={"/images/Logo.svg"} height={50} width={50} alt="" />
-          </Link>
+    <div className="w-64 lg:w-72 p-3">
+      <div className="w-full h-full border py-10 rounded-3xl space-y-8">
+        <UserIcon />
+        <GlobalSearch />
+        <div className="flex flex-col items-start w-full px-3 gap-5">
           {pages.map((item) => {
             const isActive = pathname === item.path;
             return (
-              <Tooltip key={item.path}>
-                <TooltipTrigger>
-                  <Link
-                    href={item.path}
+              <Link
+                key={item.path}
+                href={item.path}
+                className={cn(
+                  "flex items-center justify-between w-full py-3 bg-muted rounded-full px-3 relative hover:text-primary transition-colors ease-in-out",
+                  isActive && "bg-primary text-secondary hover:text-secondary"
+                )}
+              >
+                <div className="flex items-center justify-start gap-3">
+                  <item.icon
                     className={cn(
-                      "flex gap-2 items-center bg-primary-foreground p-3 rounded-full text-muted-foreground hover:text-primary transition-colors ease-in-out",
-                      isActive && "bg-primary text-white hover:text-white"
+                      "w-5 h-5 text-primary",
+                      isActive && "text-secondary"
                     )}
-                    key={item.name}
-                  >
-                    <item.icon className="h-5 w-5" />
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{item.name}</p>
-                </TooltipContent>
-              </Tooltip>
+                  />
+                  <p className="text-sm font-semibold">{item.name}</p>
+                </div>
+
+                <div>
+                  {item.add && (
+                    <Button
+                      className="absolute left-1 top-1 rounded-full"
+                      size={"icon"}
+                      variant={"outline"}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        router.push(item.add);
+                      }}
+                    >
+                      <Plus className="text-primary" />
+                    </Button>
+                  )}
+                </div>
+              </Link>
             );
           })}
         </div>
       </div>
-    </TooltipProvider>
+    </div>
   );
 };
 

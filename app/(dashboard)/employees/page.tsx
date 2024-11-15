@@ -27,15 +27,13 @@ const Page = () => {
         label={"إضافة موظف"}
       />
       <Separator />
-      <div className="p-6">
-        {isLoading ? (
-          <Loading />
-        ) : isError ? (
-          <div className="text-red-500">{error.message}</div>
-        ) : (
-          <DataTable columns={columns} data={data} />
-        )}
-      </div>
+      {isLoading ? (
+        <Loading />
+      ) : isError ? (
+        <div className="text-red-500">{error.message}</div>
+      ) : (
+        <DataTable columns={columns} data={data} />
+      )}
     </div>
   );
 };

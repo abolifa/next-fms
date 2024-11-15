@@ -78,7 +78,7 @@ export const columns: ColumnDef<Employee>[] = [
   },
   {
     accessorKey: "id",
-    header: "الإجراءات",
+    header: "",
     cell: ({ row }) => {
       const id = row.original.id;
       const router = useRouter();
@@ -104,7 +104,7 @@ export const columns: ColumnDef<Employee>[] = [
         },
       });
       return (
-        <div className="flex items-center justify-end gap-3 max-w-32">
+        <div className="flex items-center justify-end gap-3">
           <Button
             variant={"outline"}
             size={"sm"}
