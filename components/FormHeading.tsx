@@ -33,9 +33,9 @@ const FormHeading: React.FC<FormHeadingProps> = ({
 }) => {
   const router = useRouter();
   const mutation = useMutation({
-    mutationKey: ["employee"],
+    mutationKey: [action],
     mutationFn: async () => {
-      await axios.delete(`/api/employees/${id}`);
+      await axios.delete(`/api/${action}/${id}`);
     },
     onMutate: () => {
       toast.loading("جاري الحذف", {
@@ -69,16 +69,16 @@ const FormHeading: React.FC<FormHeadingProps> = ({
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogTitle>هل أنت متأكد؟</AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
+                هذا القرار لا يمكن التراجع عنه وسيؤدي إلى إزالة الصنف من قاعدة
+                البيانات نهائياً
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogCancel>إلغاء</AlertDialogCancel>
               <AlertDialogAction onClick={() => mutation.mutate()}>
-                Continue
+                استمرار
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

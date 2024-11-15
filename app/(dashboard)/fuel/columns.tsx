@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Employee } from "@prisma/client";
+import { FuelType } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { Edit, Trash2 } from "lucide-react";
@@ -24,55 +24,42 @@ import { queryClient } from "../layout";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-export const columns: ColumnDef<Employee>[] = [
+export const columns: ColumnDef<FuelType>[] = [
   {
     accessorKey: "name",
-    header: "الإسم",
+    header: "الوقود",
     cell: ({ row }) => {
       const name = row.original.name;
       const id = row.original.id;
       const router = useRouter();
       return (
-        <div
-          className="cursor-pointer"
-          onClick={() => router.push(`/employees/${id}`)}
+        <Badge
+          className={cn(
+            "cursor-pointer",
+            name === "وقود طائرات" && "bg-red-500 text-secondary-foreground",
+            name === "بنزين" && "bg-green-500 text-secondary-foreground",
+            name === "ديزل" && "bg-orange-500 text-secondary-foreground"
+          )}
+          onClick={() => router.push(`/fuel/${id}`)}
         >
           {name}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "phone",
-    header: "رقم الهاتف",
-  },
-  {
-    accessorKey: "email",
-    header: "البريد الإلكتروني",
-  },
-  {
-    accessorKey: "major",
-    header: "الفريق",
-    cell: ({ row }) => {
-      return (
-        <Badge className="capitalize bg-teal-500 text-black">
-          {row.original.major}
         </Badge>
       );
     },
   },
   {
-    accessorKey: "class",
-    header: "التخصص",
+    accessorKey: "created",
+    header: "تاريخ الإنشاء",
     cell: ({ row }) => {
-      return <Badge className="capitalize">{row.original.class}</Badge>;
+      const date = row.original.created;
+      return format(new Date(date), "dd/MM/yyyy");
     },
   },
   {
-    accessorKey: "startDate",
-    header: "تاريخ المباشرة",
+    accessorKey: "updated",
+    header: "تاريخ التعديل",
     cell: ({ row }) => {
-      const date = row.original.startDate;
+      const date = row.original.updated;
       return format(new Date(date), "dd/MM/yyyy");
     },
   },
@@ -85,7 +72,7 @@ export const columns: ColumnDef<Employee>[] = [
       const mutation = useMutation({
         mutationKey: ["employee"],
         mutationFn: async () => {
-          await axios.delete(`/api/employees/${id}`);
+          await axios.delete(`/api/fuel/${id}`);
         },
         onMutate: () => {
           toast.loading("جاري الحذف", {
@@ -100,7 +87,7 @@ export const columns: ColumnDef<Employee>[] = [
           toast.error("فشل الحذف");
         },
         onSettled: () => {
-          queryClient.invalidateQueries({ queryKey: ["employees"] });
+          queryClient.invalidateQueries({ queryKey: ["fuel"] });
         },
       });
       return (
@@ -108,7 +95,7 @@ export const columns: ColumnDef<Employee>[] = [
           <Button
             variant={"outline"}
             size={"sm"}
-            onClick={() => router.push(`/employees/${id}`)}
+            onClick={() => router.push(`/fuel/${id}`)}
           >
             <Edit />
             تعديل

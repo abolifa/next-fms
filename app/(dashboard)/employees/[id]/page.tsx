@@ -131,7 +131,12 @@ const Page = () => {
                 <FormItem>
                   <FormLabel required>الإسم</FormLabel>
                   <FormControl>
-                    <Input {...field} Icon={User} placeholder="اسم الموظف" />
+                    <Input
+                      disabled={loading}
+                      {...field}
+                      Icon={User}
+                      placeholder="اسم الموظف"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -145,6 +150,7 @@ const Page = () => {
                   <FormLabel>البريد الإلكتروني</FormLabel>
                   <FormControl>
                     <Input
+                      disabled={loading}
                       {...field}
                       Icon={Mail}
                       placeholder="البريد الإلكتروني"
@@ -161,7 +167,12 @@ const Page = () => {
                 <FormItem>
                   <FormLabel>رقم الهاتف</FormLabel>
                   <FormControl>
-                    <Input {...field} Icon={Phone} placeholder="091XXXXXXX" />
+                    <Input
+                      disabled={loading}
+                      {...field}
+                      Icon={Phone}
+                      placeholder="091XXXXXXX"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -174,7 +185,11 @@ const Page = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>الفريق</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    disabled={loading}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="اختر الفريق" />
@@ -212,7 +227,11 @@ const Page = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>التخصص</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    disabled={loading}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="اختر التخصص" />
@@ -254,6 +273,7 @@ const Page = () => {
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
+                          disabled={loading}
                           variant={"outline"}
                           className={cn(
                             "",
@@ -287,7 +307,7 @@ const Page = () => {
             />
           </div>
           <div className="w-full flex items-center justify-end">
-            <Button type="submit" className="px-10">
+            <Button disabled={loading} type="submit" className="px-10">
               حفظ
             </Button>
           </div>
